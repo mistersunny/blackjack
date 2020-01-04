@@ -1,0 +1,71 @@
+<meta charset="utf-8">
+<script>
+    function getRandomIntInclusive(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    function getCard() {
+        var cards = ['6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+        return cards[getRandomIntInclusive(0, cards.length - 1)];
+    }
+    var dealer = [getCard()];
+    var player = [getCard(), getCard()];
+    function getSum(arr) {
+        var sum = 0;
+        arr.forEach(element => {
+            if (element != 'A') {
+                if (element == 'J' || element == 'Q' || element == 'K') {
+                    sum = sum + 10;
+                } else {
+                    sum = sum + parseInt(element);
+                }
+            }
+        });
+
+        arr.forEach(element => {
+            if (element == 'A') {
+                if (sum > 10) {
+                    sum = sum + 1;
+                } else {
+                    sum = sum + 11;
+                }
+            }
+        });
+        return sum;
+    }
+    function getStatus() {
+        return "Дилер: " + dealer.join(' ') + ', ' + 'Ваши: ' + player.join(' ') + '.';
+    }
+    var answer = "";
+    answer = prompt((getStatus()) + ' Желаете еще карту? 1 - да, 2 - нет');
+    while (answer == '1') {
+        player.push(getCard());
+        alert(getStatus());
+        if (getSum(player) > 21) {
+            alert('Увы, Вы проиграли(')
+            break
+        } else if (getSum(player) < 21) {
+            answer = prompt((getStatus()) + ' Желаете еще карту? 1 - да, 2 - нет');
+        } else {
+            alert('У вас 21, поздравляем!')
+            alert(getStatus());
+            break
+        }
+    }
+    while (answer == '2') {
+        if (getSum(dealer) > 21 && getSum(player) < 22) {
+            alert('Вы победили');
+            break
+        } else if (getSum(player) < 22 && (getSum(dealer) < getSum(player))) {
+            dealer.push(getCard());
+            alert(getStatus());
+        } else if (getSum(player) < 22 && (getSum(dealer) > getSum(player))) {
+            alert('Увы, Вы проиграли(')
+            break
+        } else if (getSum(dealer) == getSum(player)) {
+            alert("Похоже ничья")
+            break
+        }
+    }
+</script>
